@@ -31,6 +31,8 @@ class consul_template::params {
       '8.04'  => 'debian',
       '15.04' => 'systemd',
       '16.04' => 'systemd',
+      '18.04' => 'systemd',
+      '20.04' => 'systemd',
       default => 'upstart'
     },
     /CentOS|RedHat/      => $::operatingsystemmajrelease ? {
