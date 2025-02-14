@@ -11,29 +11,33 @@ class consul_template::install {
   }
 
   if $consul_template::install_method == 'url' {
-    include staging
-    if $facts['os']['name'] != 'darwin' {
-      ensure_packages(['tar'])
+    $install_path = pick($consul_template::archive_path, '/opt/consul-template')
+
+    include archive
+    file { [
+        $install_path,
+      "${install_path}/consul-template-${consul_template::version}"]:
+        ensure => directory,
+        owner  => 'root',
+        group  => 0, # 0 instead of root because OS X uses "wheel".
+        mode   => '0555';
     }
-    staging::file { "consul-template_${consul_template::version}.${consul_template::download_extension}":
-      source => $consul_template::_download_url,
-    }
-    -> file { "${staging::path}/consul-template-${consul_template::version}":
-      ensure => directory,
-    }
-    -> staging::extract { "consul-template_${consul_template::version}.${consul_template::download_extension}":
-      target  => "${staging::path}/consul-template-${consul_template::version}",
-      creates => "${staging::path}/consul-template-${consul_template::version}/consul-template",
+    -> archive { "${install_path}/consul-template-${consul_template::version}.${consul_template::download_extension}":
+      ensure       => present,
+      source       => $consul_template::_download_url,
+      extract      => true,
+      extract_path => "${install_path}/consul-template-${consul_template::version}",
+      creates      => "${install_path}/consul-template-${consul_template::version}/consul-template",
     }
     -> file {
-      "${staging::path}/consul-template-${consul_template::version}/consul-template":
+      "${install_path}/consul-template-${consul_template::version}/consul-template":
         owner => 'root',
         group => 0, # 0 instead of root because OS X uses "wheel".
         mode  => '0555';
       "${consul_template::bin_dir}/consul-template":
         ensure => link,
-        target => "${staging::path}/consul-template-${consul_template::version}/consul-template",
-        notify => Service['consul-template'];
+        notify => Service['consul-template'],
+        target => "${install_path}/consul-template-${consul_template::version}/consul-template";
     }
   } elsif $consul_template::install_method == 'package' {
     package { $consul_template::package_name:

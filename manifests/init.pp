@@ -53,6 +53,7 @@ class consul_template (
   String $init_style                         = $consul_template::params::init_style,
   String $os                                 = $consul_template::params::os,
   String $bin_dir                            = '/usr/local/bin',
+  String $archive_path                       = '',
   Hash $config_hash                          = {},
   Hash $config_defaults                      = {},
   String $config_dir                         = '/etc/consul-template',
