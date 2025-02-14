@@ -12,6 +12,7 @@ SuccessExitStatus=12
 ExecReload=/bin/kill -SIGHUP $MAINPID
 ExecStop=/bin/kill -SIGINT $MAINPID
 KillMode=process
+KillSignal=SIGINT
 Restart=always
 RestartSec=42s
 LimitNOFILE=4096
