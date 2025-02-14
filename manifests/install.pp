@@ -34,7 +34,8 @@ class consul_template::install {
         mode  => '0555';
       "${consul_template::bin_dir}/consul-template":
         ensure => link,
-        target => "${staging::path}/consul-template-${consul_template::version}/consul-template";
+        target => "${staging::path}/consul-template-${consul_template::version}/consul-template",
+        notify => Service['consul-template'];
     }
 
   } elsif $consul_template::install_method == 'package' {
