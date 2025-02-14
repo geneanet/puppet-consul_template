@@ -4,10 +4,9 @@
 # It sets variables according to platform.
 #
 class consul_template::params {
-
   $os = downcase($facts['kernel'])
 
-  case $facts['architecture'] {
+  case $facts['os']['architecture'] {
     'x86_64', 'amd64': {
       $arch = 'amd64'
     }
@@ -17,7 +16,7 @@ class consul_template::params {
     }
 
     default:           {
-      fail("Unsupported kernel architecture: ${facts['architecture']}")
+      fail("Unsupported kernel architecture: ${facts['os']['architecture']}")
     }
   }
 
@@ -35,7 +34,7 @@ class consul_template::params {
       /(12|13|14)/ => 'sysv',
       default      => 'systemd',
     },
-    'Debian'        =>  $facts['os']['release']['major'] ? {
+    'Debian'        => $facts['os']['release']['major'] ? {
       '7' => 'debian',
       default     => 'systemd'
     },

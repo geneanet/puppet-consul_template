@@ -4,11 +4,10 @@
 # It ensure the service is running.
 #
 class consul_template::service {
-
-  if $::consul_template::init_style == 'sysv' {
+  if $consul_template::init_style == 'sysv' {
     $service_provider = 'redhat'
   } else {
-    $service_provider = $::consul_template::init_style
+    $service_provider = $consul_template::init_style
   }
 
   service { 'consul-template':
@@ -17,5 +16,4 @@ class consul_template::service {
     provider => $service_provider,
     name     => 'consul-template',
   }
-
 }

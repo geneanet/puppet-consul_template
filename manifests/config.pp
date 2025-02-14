@@ -7,7 +7,6 @@ class consul_template::config (
   $config_defaults       = $consul_template::config_defaults,
   $purge                 = true,
 ) {
-
   $config_base = {
     consul => {
       address => 'localhost:8500',

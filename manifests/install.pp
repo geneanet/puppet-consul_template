@@ -1,7 +1,6 @@
 # == Class consul_template::intall
 #
 class consul_template::install {
-
   if ! empty($consul_template::data_dir) {
     file { $consul_template::data_dir:
       ensure => 'directory',
@@ -12,7 +11,6 @@ class consul_template::install {
   }
 
   if $consul_template::install_method == 'url' {
-
     include staging
     if $facts['os']['name'] != 'darwin' {
       ensure_packages(['tar'])
@@ -37,19 +35,15 @@ class consul_template::install {
         target => "${staging::path}/consul-template-${consul_template::version}/consul-template",
         notify => Service['consul-template'];
     }
-
   } elsif $consul_template::install_method == 'package' {
-
     package { $consul_template::package_name:
       ensure => $consul_template::package_ensure,
     }
-
   } else {
     fail("The provided install method ${consul_template::install_method} is invalid")
   }
 
   if $consul_template::init_style {
-
     case $consul_template::init_style {
       'upstart' : {
         file { '/etc/init/consul-template.conf':
@@ -79,7 +73,7 @@ class consul_template::install {
           mode    => '0555',
           owner   => 'root',
           group   => 'root',
-          content => template('consul_template/consul-template.sysv.erb')
+          content => template('consul_template/consul-template.sysv.erb'),
         }
       }
       'debian' : {
@@ -87,7 +81,7 @@ class consul_template::install {
           mode    => '0555',
           owner   => 'root',
           group   => 'root',
-          content => template('consul_template/consul-template.debian.erb')
+          content => template('consul_template/consul-template.debian.erb'),
         }
       }
       'sles' : {
@@ -95,7 +89,7 @@ class consul_template::install {
           mode    => '0555',
           owner   => 'root',
           group   => 'root',
-          content => template('consul_template/consul-template.sles.erb')
+          content => template('consul_template/consul-template.sles.erb'),
         }
       }
       default : {

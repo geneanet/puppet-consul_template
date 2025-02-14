@@ -1,6 +1,6 @@
 # == Class consul_template::logrotate
 #
-class consul_template::logrotate(
+class consul_template::logrotate (
   $logrotate_compress     = $consul_template::logrotate_compress,
   $logrotate_files        = $consul_template::logrotate_files,
   $logrotate_on           = $consul_template::logrotate_on,
@@ -8,7 +8,6 @@ class consul_template::logrotate(
   String $restart_sysv    = '/sbin/service consul-template restart',
   String $restart_systemd = '/bin/systemctl restart consul-template.service',
 ) {
-
   case $facts['os']['family'] {
     'RedHat': {
       case $facts['os']['name'] {
@@ -45,5 +44,4 @@ class consul_template::logrotate(
       mode    => '0644',
     }
   }
-
 }

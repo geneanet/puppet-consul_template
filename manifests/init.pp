@@ -81,7 +81,6 @@ class consul_template (
   String $version                            = '0.35.0',
   Hash $watches                              = {},
 ) inherits consul_template::params {
-
   $_download_url = pick($download_url, "${download_url_base}/${version}/${package_name}_${version}_${os}_${arch}.${download_extension}")
 
   if $watches {
@@ -97,5 +96,4 @@ class consul_template (
   -> Class['consul_template::config']
   ~> Class['consul_template::service']
   -> Class['consul_template::logrotate']
-
 }
